@@ -45,9 +45,3 @@ class DiscreteChain:
     
     def print_tpm(self) -> None:
         print(self.tpm)
-
-j=np.array([[.9,.1],[.6,.4]])
-y=np.array(["sa",0])
-t=np.array([0.5,0.5])
-i = DiscreteChain(j,y)
-print(i.generate_chain(t,20))
