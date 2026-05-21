@@ -70,7 +70,7 @@ def max_likelihood_fit(labels: np.array, data: np.array) -> DiscreteChain:
         p[i,j] += 1
 
     #In case no instances of certain state - prevents division by 0
-    p[np.where(~p.any(axis=1)), :] = np.ones(tpm_size, dtype=float)
+    p[np.where(~p.any(axis=1)), :] = np.ones(tpm_size)
 
     p /= np.sum(p,axis=1,keepdims=True)
 
