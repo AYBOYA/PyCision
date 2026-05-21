@@ -23,7 +23,7 @@ class DiscreteChain:
         self.labels = labels
 
 
-    def generate_chain(self, starting_distribution: np.array, chain_length: int) -> np.array:
+    def simulate_chain(self, starting_distribution: np.array, chain_length: int) -> np.array:
         """
             Generate Chain Based on TPM
 
@@ -45,3 +45,35 @@ class DiscreteChain:
     
     def print_tpm(self) -> None:
         print(self.tpm)
+
+
+"""
+    Static Methods
+"""
+
+def max_likelihood_fit(labels: np.array, data: np.array) -> DiscreteChain:
+    """
+        Generate the DTMC with Maximum Likelihood Fit to the given data
+
+        args:
+            labels - Possible states for DTMC
+            data - Sequence of data to fit the DTMC
+    """
+
+    tpm_size = len(labels)
+    p = np.zeros((tpm_size,tpm_size))
+
+    #Turns data into indicies for the TPM
+    data_indicies = [np.where(labels == v) for v in data]
+
+    for i, j in zip(data_indicies[:-1],data_indicies[1:]):
+        p[i,j] += 1
+
+    #In case no instances of certain state - prevents division by 0
+    p[np.where(~p.any(axis=1)), :] = np.ones(tpm_size, dtype=float)
+
+    p /= np.sum(p,axis=1,keepdims=True)
+
+    #Create and Return Chain
+    mc = DiscreteChain(p,labels)
+    return mc
